@@ -33,11 +33,11 @@
                 </thead>
 
                 <tbody>
-                <tr>
-                    <th class="col-1" scope="row">ID</th>
-                    <td class="col-4">Batman</td>
-                    <td class="col-2">R$ 5000,00</td>
-                    <td class="col-2">ATIVO</td>
+                <tr th:each="professor : ${professores}">
+                    <th class="col-1" scope="row" th:text="${professor.getId()}">ID</th>
+                    <td class="col-4" th:text="${professor.nome}">Nome do Professor</td>
+                    <td class="col-2" th:text="${professor.salario}">Salário</td>
+                    <td class="col-2" th:text="${professor.statusProfessor.toString()}">STATUS</td>
                     <td class="col-1"><a href="#">Detalhes</a></td>
                     <td class="col-1"><a href="#">Editar</a></td>
                     <td class="col-1"><a href="#">Deletar</a></td>
@@ -56,10 +56,6 @@
                 </tbody>
 
             </table>
-            <div class="row">
-                <a href="/professores/new">Novo Professor</a>
-            </div>
-
         </div>
     </div>
 </div>

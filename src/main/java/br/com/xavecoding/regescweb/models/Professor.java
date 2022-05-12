@@ -48,11 +48,11 @@ public class Professor {
         this.salario = salario;
     }
 
-    public StatusProfessor getStatusOperator() {
+    public StatusProfessor getStatusProfessor() {
         return statusProfessor;
     }
 
-    public void setStatusOperator(StatusProfessor statusProfessor) {
+    public void setStatusProfessor(StatusProfessor statusProfessor) {
         this.statusProfessor = statusProfessor;
     }
 }
