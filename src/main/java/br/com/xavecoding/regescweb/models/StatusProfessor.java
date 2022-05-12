@@ -1,5 +1,5 @@
 package br.com.xavecoding.regescweb.models;
 
-public enum StatusOperator {
+public enum StatusProfessor {
     ATIVO, INATIVO, APOSENTADO, AFASTADO;
 }
