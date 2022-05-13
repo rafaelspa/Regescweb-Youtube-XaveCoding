@@ -20,10 +20,6 @@ public class ProfessorController {
     @Autowired
     private ProfessorRepository professorRepository;
 
-    public ProfessorController(ProfessorRepository professorRepository) {
-        this.professorRepository = professorRepository;
-    }
-
     @GetMapping("/professores")
     public ModelAndView index() {
         List<Professor> professores = this.professorRepository.findAll();
@@ -33,36 +29,27 @@ public class ProfessorController {
         return mv;
     }
 
-//    @GetMapping("/professor/new")
-//    public String nnew() {
-//        return "professores/new";
-//    }
-
-    @GetMapping("/professor/new")
-    public ModelAndView nnew() {
+    @GetMapping("/professores/new")
+    public ModelAndView nnew(RequisicaoNovoProfessor requisicao) {
         ModelAndView mv = new ModelAndView("professores/new");
-        mv.addObject("statusProfessor", StatusProfessor.values());
+        mv.addObject("listaStatusProfessor", StatusProfessor.values());
         return mv;
     }
 
     // web parameter tampering
     @PostMapping("/professores")
-    public String create(@Valid RequisicaoNovoProfessor requisicao, BindingResult bindingResult) {
+    public ModelAndView create(@Valid RequisicaoNovoProfessor requisicao, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println("\n*************  TEM ERROS *************\n");
-            return "redirect:/professor/new";
+
+            ModelAndView mv = new ModelAndView("professores/new");
+            mv.addObject("listaStatusProfessor", StatusProfessor.values());
+            return mv;
         } else {
             Professor professor = requisicao.toProfessor();
-    //        System.out.println();
-    //        System.out.println(requisicao);
-    //        System.out.println();
-    //        System.out.println();
-    //        System.out.println(professor);
-    //        System.out.println();
             this.professorRepository.save(professor);
 
-            return "redirect:/professores";
-
+            return new ModelAndView("redirect:/professores");
         }
     }
 }
