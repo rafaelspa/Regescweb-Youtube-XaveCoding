@@ -1,5 +1,6 @@
 package br.com.xavecoding.regescweb.controllers;
 
+import br.com.xavecoding.regescweb.dto.RequisicaoNovoProfessor;
 import br.com.xavecoding.regescweb.models.Professor;
 import br.com.xavecoding.regescweb.models.StatusProfessor;
 import br.com.xavecoding.regescweb.repositories.ProfessorRepository;
@@ -44,10 +45,16 @@ public class ProfessorController {
 
     // web parameter tampering
     @PostMapping("/professores")
-    public String create(Professor professor) {
-        System.out.println();
-        System.out.println(professor);
-        System.out.println();
+    public String create(RequisicaoNovoProfessor requisicao) {
+        Professor professor = requisicao.toProfessor();
+//        System.out.println();
+//        System.out.println(requisicao);
+//        System.out.println();
+//        System.out.println();
+//        System.out.println(professor);
+//        System.out.println();
+        this.professorRepository.save(professor);
+        
         return "redirect:/professores";
     }
 }
