@@ -75,7 +75,7 @@ public class ProfessorController {
         else {
             System.out.println("######### NAO ACHOU O PROFESSOR DE ID " + id + " #########");
 
-            return new ModelAndView("redirect:/professores");
+            return this.retornaErroProfessor("SHOW ERROR: Professor #" + id + " não encontrado no banco!");
         }
 
     }
@@ -101,8 +101,7 @@ public class ProfessorController {
         // nao achou um registro na tabela Professor com o id informado
         else {
             System.out.println("######### NAO ACHOU O PROFESSOR DE ID " + id + " #########");
-
-            return new ModelAndView("redirect:/professores");
+            return this.retornaErroProfessor("EDIT ERROR: Professor #" + id + " não encontrado no banco!");
         }
 
     }
@@ -136,8 +135,7 @@ public class ProfessorController {
             // nao achou um registro na tabela Professor com o id informado
             else {
                 System.out.println("######### NAO ACHOU O PROFESSOR DE ID " + id + " #########");
-
-                return new ModelAndView("redirect:/professores");
+                return this.retornaErroProfessor("UPDATE ERROR: Professor #" + id + " não encontrado no banco!");
             }
 
 
@@ -153,14 +151,25 @@ public class ProfessorController {
     }
 
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable Long id) {
+    public ModelAndView /* String */ delete(@PathVariable Long id) {
+        ModelAndView mv = new ModelAndView("redirect:/professores");
         try {
             this.professorRepository.deleteById(id);
-            return "redirect:/professores";
+            mv.addObject("mensagem", "Professor #" + id + " deletado com sucesso!");
+            mv.addObject("erro", false);
+//            return "redirect:/professores?mensagem="; Pode colocar a mensagem aqui
         } catch (EmptyResultDataAccessException e) {
             System.out.println(e);
-            return "redirect:/professores";
+            mv = retornaErroProfessor("DELETE ERROR: Professor #" + id + " não encontrado no banco!");
+//            return "redirect:/professores";   Caso use string
         }
+        return mv;
     }
 
+    private ModelAndView retornaErroProfessor(String msg) {
+        ModelAndView mv = new ModelAndView("redirect:/professores");
+        mv.addObject("mensagem", msg);
+        mv.addObject("erro", true);
+        return mv;
+    }
 }
