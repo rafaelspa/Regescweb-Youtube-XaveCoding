@@ -5,6 +5,7 @@ import br.com.xavecoding.regescweb.models.Professor;
 import br.com.xavecoding.regescweb.models.StatusProfessor;
 import br.com.xavecoding.regescweb.repositories.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,7 +85,6 @@ public class ProfessorController {
     public ModelAndView edit(@PathVariable Long id, RequisicaoFormProfessor requisicao) {
 
 
-
         Optional<Professor> optional = this.professorRepository.findById(id);
 
         if (optional.isPresent()) {
@@ -148,9 +148,18 @@ public class ProfessorController {
             Professor professor = requisicao.toProfessor();
             this.professorRepository.save(professor);
             return new ModelAndView("redirect:/professores/" + professor.getId());
-
-
             */
+        }
+    }
+
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        try {
+            this.professorRepository.deleteById(id);
+            return "redirect:/professores";
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println(e);
+            return "redirect:/professores";
         }
     }
 
