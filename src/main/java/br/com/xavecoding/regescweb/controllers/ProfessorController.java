@@ -72,7 +72,7 @@ public class ProfessorController {
         }
         // nao achou um registro na tabela Professor com o id informado
         else {
-            System.out.println("$$$$$$$$$ NAO ACHOU O PROFESSOR DE ID " + id + " $$$$$$$$$");
+            System.out.println("######### NAO ACHOU O PROFESSOR DE ID " + id + " #########");
 
             return new ModelAndView("redirect:/professores");
         }
@@ -100,10 +100,58 @@ public class ProfessorController {
         }
         // nao achou um registro na tabela Professor com o id informado
         else {
-            System.out.println("$$$$$$$$$ NAO ACHOU O PROFESSOR DE ID " + id + " $$$$$$$$$");
+            System.out.println("######### NAO ACHOU O PROFESSOR DE ID " + id + " #########");
 
             return new ModelAndView("redirect:/professores");
         }
 
     }
+
+    @PostMapping("/{id}")
+    public ModelAndView update(@PathVariable Long id, @Valid RequisicaoFormProfessor requisicao, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ModelAndView mv = new ModelAndView("professores/edit");
+            mv.addObject("professorId", id);
+            mv.addObject("listaStatusProfessor", StatusProfessor.values());
+
+            return mv;
+        } else {
+
+            Optional<Professor> optional = this.professorRepository.findById(id); // Para poder retornar nulo do bd
+
+            if (optional.isPresent()) {
+                Professor professor = requisicao.toProfessor(optional.get());
+                this.professorRepository.save(professor); // agora ele identifica o id e salva no registro certo
+
+                return new ModelAndView("redirect:/professores/" + professor.getId());
+                /*
+                Não é convencional deixar lógica de negócio aqui, colocar no RequisicaoFormProfessor ou no Professor
+
+                professor.setNome(requisicao.getNome());
+                professor.setSalario(requisicao.getSalario());
+                professor.setStatusProfessor(requisicao.getStatusProfessor());
+
+                */
+            }
+            // nao achou um registro na tabela Professor com o id informado
+            else {
+                System.out.println("######### NAO ACHOU O PROFESSOR DE ID " + id + " #########");
+
+                return new ModelAndView("redirect:/professores");
+            }
+
+
+
+            /*
+            Se eu fizer com as linhas abaixo, sera criado um registro novo pq n tem id
+
+            Professor professor = requisicao.toProfessor();
+            this.professorRepository.save(professor);
+            return new ModelAndView("redirect:/professores/" + professor.getId());
+
+
+            */
+        }
+    }
+
 }

@@ -53,11 +53,21 @@ public class RequisicaoFormProfessor {
         return professor;
     }
 
+    public Professor toProfessor(Professor professor) { // Estou passando referência, o próprio objeto será mudado
+        professor.setNome(this.nome);
+        professor.setSalario(this.salario);
+        professor.setStatusProfessor(this.statusProfessor);
+
+        return professor; // nao precisaria retornar
+    }
+
     public void fromProfessor(Professor professor) {
         this.nome = professor.getNome();
         this.salario = professor.getSalario();
         this.statusProfessor = professor.getStatusProfessor();
     }
+
+
 
     @Override
     public String toString() {
